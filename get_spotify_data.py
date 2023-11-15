@@ -37,12 +37,36 @@ def get_track_details(track_id, token):
     image_url = json_data['album']['images'][0]['url']
     return image_url
 
+# Function to get user playlists
+def get_user_playlists(user_id, token):
+    url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+    response = requests.get(url, headers={
+        'Authorization': f'Bearer {token}'
+    })
+    json_data = response.json()
+    playlists = []
+    for item in json_data['items']:
+        playlists.append({
+            'name': item['name'],
+            'id': item['id'],
+        })
+    return playlists
+
+
 # Your Spotify API Credentials
 client_id = '484f223094b54d77a0b836e982d81799'
 client_secret = '791a80ce2748414bb9b7e455c3d15ccc'
 
 # Get Access Token
 access_token = get_spotify_token(client_id, client_secret)
+
+# Get user playlists (replace 'your_user_id' with the Spotify user ID)
+user_playlists = get_user_playlists('smedjan', access_token)
+
+# Print user playlists
+print("User Playlists:")
+for playlist in user_playlists:
+    print(f"Name: {playlist['name']}, ID: {playlist['id']}")
 
 # Read your DataFrame (replace 'your_file.csv' with the path to your CSV file)
 df_spotify = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
