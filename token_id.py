@@ -4,7 +4,8 @@ import pandas as pd
 from spotipy.oauth2 import SpotifyOAuth
 
 all_tracks = []
-
+user_tracks_id = []
+all_track_audio_features = []
 # Set up your Spotify API credentials
 client_id = '484f223094b54d77a0b836e982d81799'
 client_secret = '791a80ce2748414bb9b7e455c3d15ccc'
@@ -191,6 +192,51 @@ csv_file = 'all_user_tracks.csv'
 df_all_user_tracks.to_csv(csv_file, index=False)
 
 print(f'User albums have been written to {csv_file}')
+
+
+#code to get tracks audio features
+def get_tracks_audio_features(track_id, sp):
+    all_track_audio_features = []
+    print(track_id)
+    track_audio_features = sp.audio_features(track_id)
+    if track_audio_features is not None and track_audio_features[0] is not None:
+            audio_feature = track_audio_features[0]
+            # Define default values for missing keys
+            default_values = {
+                'danceability': 0.0,
+                'energy': 0.0,
+                'key': 0,
+                'loudness': 0.0,
+                'mode': 0,
+                'speechiness': 0.0,
+                'acousticness': 0.0,
+                'instrumentalness': 0.0,
+                'liveness': 0.0,
+                'valence': 0.0,
+                'tempo': 0.0,
+            }
+            # Fill missing keys with default values
+            audio_feature = {**default_values, **audio_feature}
+            all_track_audio_features.append(audio_feature)
+
+       
+
+    return all_track_audio_features
+
+
+for user_tracks in all_user_tracks:
+        user_tracks_id = user_tracks['track_id']
+        features = get_tracks_audio_features(user_tracks_id, sp)
+        all_track_audio_features.extend(features)
+
+
+df_audio_features = pd.DataFrame(all_track_audio_features)
+
+csv_file = 'track_audio_features.csv'
+
+df_audio_features.to_csv(csv_file, index=False)
+
+print(f'Track audio features have been written to {csv_file}')
 
 
 # Get the user's top tracks (limit can be adjusted)
