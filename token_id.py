@@ -6,6 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 all_tracks = []
 user_tracks_id = []
 all_track_audio_features = []
+all_album_tracks = []
 # Set up your Spotify API credentials
 client_id = '484f223094b54d77a0b836e982d81799'
 client_secret = '791a80ce2748414bb9b7e455c3d15ccc'
@@ -17,11 +18,34 @@ redirect_uri = 'https://accounts.spotify.com/authorize'
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri=redirect_uri,
-                                               scope='playlist-read-private playlist-read-collaborative user-top-read user-library-read user-follow-read'))
+                                               scope='user-read-email user-read-private playlist-read-private playlist-read-collaborative user-top-read user-library-read user-follow-read'))
 
 
 # Get the current user's profile
 user_profile = sp.current_user()
+
+
+# Extract the required information
+profile_picture = user_profile['images'][0]['url'] if user_profile['images'] else None
+display_name = user_profile['display_name']
+email = user_profile['email']
+country = user_profile['country']
+
+# Create a DataFrame with the user information
+user_data = pd.DataFrame({
+    "Profile Picture": [profile_picture],
+    "Display Name": [display_name],
+    "Email": [email],
+    "Country": [country]
+})
+
+# Define the CSV file path
+csv_file = 'user_profile.csv'
+
+# Save the DataFrame to a CSV file
+user_data.to_csv(csv_file, index=False)
+
+print(f"User profile information has been written to {csv_file}")
 
 # Get the current user's playlists
 user_playlists = sp.current_user_playlists()
@@ -94,6 +118,13 @@ df_albums.to_csv(csv_file, index=False)
 
 print(f'User albums have been written to {csv_file}')
 
+
+
+
+
+
+
+
 # Get the current user's followed artists
 user_followed_artists = sp.current_user_followed_artists()
 
@@ -107,6 +138,7 @@ def get_artist_details(artist):
 
     artist_details = {
         'Artist Name': artist['name'],
+        'Artist ID': artist['id'], 
         'Followers': artist['followers']['total'],
         'Number of Songs': len(artist_tracks),
         'Image URL': artist['images'][0]['url'] if artist['images'] else None
@@ -157,10 +189,13 @@ def get_all_tracks_in_playlist(playlist_id, sp):
                     'playlist_id': playlist_id,
                     'track_name': track['name'],
                     'artist(s)_name': [artist['name'] for artist in track['artists']],
+                    'artist_ids': [artist['id'] for artist in track['artists']],
                     'album_name': track['album']['name'],
+                    'album_id': track['album']['id'],  # Add album_id field
                     'track_id': track['id'],
                     'Image URL': image_url,
-                    'release_date': track['album']['release_date']
+                    'release_date': track['album']['release_date'],
+                    'popularity': track['popularity'] 
                 })
 
         offset += len(playlist_tracks['items'])
@@ -197,7 +232,7 @@ print(f'User albums have been written to {csv_file}')
 #code to get tracks audio features
 def get_tracks_audio_features(track_id, sp):
     all_track_audio_features = []
-    print(track_id)
+    #print(track_id)
     track_audio_features = sp.audio_features(track_id)
     if track_audio_features is not None and track_audio_features[0] is not None:
             audio_feature = track_audio_features[0]
