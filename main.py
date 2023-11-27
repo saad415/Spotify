@@ -28,11 +28,36 @@ def main():
                                                    scope='user-read-email user-read-private playlist-read-private playlist-read-collaborative user-top-read user-library-read user-follow-read'))
 
 
-    
+    # Get user profile data
+    user_data = get_user_profile(sp)
+    write_csv(user_data, 'user_profile.csv')
+
+    # Get user Playlists
+    playlist_info = get_user_playlistinfo(sp)
+    df_playlists = pd.DataFrame(playlist_info)
+    write_csv(df_playlists, 'user_playlists.csv')
+
+    #Get user followed artirts
+    all_user_artists = get_user_followed_artists(sp)
+    df_all_user_artists = pd.DataFrame(all_user_artists)
+    write_csv(df_all_user_artists, 'user_artists.csv')  
+
+    #Get All tracks in Playlists
+    all_user_tracks = get_all_tracks_in_all_playlists(sp)
+    df_all_user_tracks = pd.DataFrame(all_user_tracks)
+    write_csv(df_all_user_tracks, 'all_user_tracks.csv') 
+
+    #Get All tracks Audio Features
+    all_track_audio_features = get_audio_features(sp,all_user_tracks)
+    df_audio_features = pd.DataFrame(all_track_audio_features)
+    write_csv(df_audio_features, 'track_audio_features.csv') 
+
+    #Get Top User tracks
     top_tracks_data = get_top_tracks(sp)
     df_top_tracks = pd.DataFrame(top_tracks_data)
     write_csv(df_top_tracks, 'top_tracks.csv') 
 
+    #Get Top User Artists
     top_artists_data = get_top_artists(sp)
     df_top_artists = pd.DataFrame(top_artists_data)
     write_csv(df_top_artists, 'top_artists.csv') 
