@@ -11,4 +11,4 @@ def write_csv(data, csv_file_name):
     
     # Save the DataFrame to a CSV file
     data.to_csv(csv_file, index=False)
-    print(f"User profile information has been written to {csv_file_name}")
+    print(f"Information has been written to {csv_file_name}")
