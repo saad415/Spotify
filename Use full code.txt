@@ -255,3 +255,10 @@ RETURN
     }
   ]
 }
+
+//Get unique values from one table and create new table
+Artists = 
+SUMMARIZECOLUMNS (
+    all_user_tracks[artist_ids.1],  -- Include the column with unique values
+    all_user_tracks[artist(s)_name]  -- Include other columns
+)
