@@ -37,10 +37,9 @@ This project aims to extract, process, and visualize Spotify user data to gain i
 ## Repository Contents
 - `scripts/`: Source code for Python scripts.
 - `data/`: Sample data files (anonymized).
-- `Spotify_Analysis.pbix`: Power BI dashboard file.
+- `main.py/`: Is main python code.
+- `Spotify.pbix`: Power BI dashboard file.
+- `Use full code.txt`: Is the text file conatining HTML code tp show images and Deneb code to show average popularity.
 - `README.md`: Documentation including setup instructions and usage guide.
 
 ---
-
-### Tips for Recruiters
-- This section could include insights into the problem-solving approach, specific Power BI features used, and potential applications of the project in a broader business context.
