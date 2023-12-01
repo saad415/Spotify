@@ -2,6 +2,7 @@
 
 ## Overview
 This project aims to extract, process, and visualize Spotify user data to gain insights into listening patterns and track characteristics using Spotify Web API, Python, Power BI, Deneb, HTML, and Google Drive.
+Link: https://app.powerbi.com/reportEmbed?reportId=34efc983-b281-4498-9635-c19ee04ae3e3&autoAuth=true&embeddedDemo=true
 ![Animated GIF](https://github.com/saad415/Spotify/blob/main/gif.gif)
 
 
