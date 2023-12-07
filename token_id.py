@@ -342,5 +342,6 @@ df_top_artists.to_csv('top_artists.csv', index=False)
 
 print("Data has been saved to 'top_artists.csv'")
 
+print('yes')
 
 

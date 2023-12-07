@@ -2,13 +2,13 @@ import spotipy
 import pandas as pd
 from spotify_api_credentials import client_id, client_secret, redirect_uri
 
-from functions.get_user_profile import get_user_profile
-from functions.get_playlist_info import get_user_playlistinfo
-from functions.get_user_followed_artists import get_user_followed_artists
-from functions.get_all_tracks_in_all_playlists import get_all_tracks_in_all_playlists
-from functions.get_audio_features import get_audio_features
-from functions.get_top_tracks import get_top_tracks
-from functions.get_top_artists import get_top_artists
+from scripts.get_user_profile import get_user_profile
+from scripts.get_playlist_info import get_user_playlistinfo
+from scripts.get_user_followed_artists import get_user_followed_artists
+from scripts.get_all_tracks_in_all_playlists import get_all_tracks_in_all_playlists
+from scripts.get_audio_features import get_audio_features
+from scripts.get_top_tracks import get_top_tracks
+from scripts.get_top_artists import get_top_artists
 
 from helper.write_to_csv import write_csv
 
