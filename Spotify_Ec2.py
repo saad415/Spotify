@@ -127,6 +127,43 @@ def put_data_in_s3_bucket(sp):
     # Save the DataFrame to a CSV file for user artists data
     df_all_user_artists.to_csv(artists_csv_file, index=False)
 
+
+    # Get the current user's playlists
+    user_playlists = sp.current_user_playlists()
+
+    # Create a list to store playlist information
+    playlist_info = []
+
+    # Loop through each playlist and get its name, ID, and image URL (if available)
+    for playlist in user_playlists['items']:
+        playlist_id = playlist['id']
+        playlist_name = playlist['name']
+        
+        # Get the playlist's images
+        images = playlist['images']
+        if images:
+            playlist_image_url = images[0]['url']
+        else:
+            playlist_image_url = None
+
+        playlist_info.append({
+            'Playlist Name': playlist_name,
+            'Playlist ID': playlist_id,
+            'Image URL': playlist_image_url
+        })
+
+    # Create a DataFrame from the list of playlists
+    df_playlists = pd.DataFrame(playlist_info)
+
+    # Define the CSV file path
+    playlist_csv_file = 'user_playlists.csv'
+
+    # Save the DataFrame to a CSV file
+    df_playlists.to_csv(playlist_csv_file, index=False)
+
+
+
+
     # Upload both CSV files to AWS S3
     def upload_to_aws(local_file, s3_bucket, s3_key, aws_access_key, aws_secret_access_key):
         try:
@@ -143,6 +180,9 @@ def put_data_in_s3_bucket(sp):
 
     # Upload user artists CSV file to AWS S3
     upload_to_aws(artists_csv_file, s3_bucket_name, 'user_artists.csv', aws_access_key_id, aws_secret_access_key)
+
+    # Upload user playlists CSV file to AWS S3
+    upload_to_aws(playlist_csv_file, s3_bucket_name, 'user_playlists.csv', aws_access_key_id, aws_secret_access_key)
 
     print("User profile and artists data have been uploaded to S3.")
 
