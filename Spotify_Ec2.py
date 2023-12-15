@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 
 all_tracks = []
-
+all_track_audio_features = []
 
 
 def save_token_info(token_info):
@@ -69,6 +69,10 @@ if not token_info:
 
 token_info = refresh_token_if_expired(sp_oauth, token_info)
 
+# Initialize the Spotify client with the access token
+sp = spotipy.Spotify(auth=token_info['access_token'])
+
+
 def get_user_albums(sp):
     user_albums = sp.current_user_saved_albums()
     albums = []
@@ -126,6 +130,39 @@ def get_all_tracks_in_playlist(playlist_id, sp):
 # Get the current user's playlists
 user_playlists = sp.current_user_playlists()
 
+
+#code to get tracks audio features
+def get_tracks_audio_features(track_id, sp):
+    all_track_audio_features = []
+    #print(track_id)
+    track_audio_features = sp.audio_features(track_id)
+    if track_audio_features is not None and track_audio_features[0] is not None:
+            audio_feature = track_audio_features[0]
+            # Define default values for missing keys
+            default_values = {
+                'danceability': 0.0,
+                'energy': 0.0,
+                'key': 0,
+                'loudness': 0.0,
+                'mode': 0,
+                'speechiness': 0.0,
+                'acousticness': 0.0,
+                'instrumentalness': 0.0,
+                'liveness': 0.0,
+                'valence': 0.0,
+                'tempo': 0.0,
+            }
+            # Fill missing keys with default values
+            audio_feature = {**default_values, **audio_feature}
+            all_track_audio_features.append(audio_feature)
+
+       
+
+    return all_track_audio_features
+
+
+
+
 def get_all_tracks_in_playlist(playlist_id, sp):
     tracks = []
     offset = 0  # Start with the first page of tracks
@@ -173,8 +210,7 @@ def get_all_tracks_in_all_playlists(sp):
 
 
 def put_data_in_s3_bucket(sp):
-    # Initialize the Spotify client with the access token
-    sp = spotipy.Spotify(auth=token_info['access_token'])
+
 
     # Get the current user's profile
     user_profile = sp.current_user()
@@ -279,6 +315,8 @@ def put_data_in_s3_bucket(sp):
     # Save the DataFrame to a CSV file
     df_albums.to_csv(albums_csv_file, index=False)
 
+    
+
     # Example usage:
     all_user_tracks = get_all_tracks_in_all_playlists(sp)
 
@@ -290,6 +328,18 @@ def put_data_in_s3_bucket(sp):
 
     # Save the DataFrame to a CSV file
     df_all_user_tracks.to_csv(all_users_csv_file, index=False)
+
+    for user_tracks in all_user_tracks:
+            user_tracks_id = user_tracks['track_id']
+            features = get_tracks_audio_features(user_tracks_id, sp)
+            all_track_audio_features.extend(features)
+
+
+    df_audio_features = pd.DataFrame(all_track_audio_features)
+
+    audio_features_csv_file = 'track_audio_features.csv'
+
+    df_audio_features.to_csv(audio_features_csv_file, index=False)
 
 
     # Upload both CSV files to AWS S3
@@ -317,6 +367,9 @@ def put_data_in_s3_bucket(sp):
     
     # Upload user user_albums CSV file to AWS S3
     upload_to_aws(all_users_csv_file, s3_bucket_name, 'all_user_tracks.csv', aws_access_key_id, aws_secret_access_key)
+
+    # Upload user user_albums CSV file to AWS S3
+    upload_to_aws(audio_features_csv_file, s3_bucket_name, 'track_audio_features.csv', aws_access_key_id, aws_secret_access_key)
     
     print("User profile and artists data have been uploaded to S3.")
 

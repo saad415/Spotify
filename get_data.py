@@ -5,7 +5,7 @@ import io
 aws_access_key_id = 'AKIAUTEANXGB2VM2JSPP'
 aws_secret_access_key = 'QfrguEBd0/8rmXctChoj+oO6WyaZLUZvhU2Jlcht'
 s3_bucket_name = 'saad-spotify'
-s3_file_key = 'user_albums.csv'  # Update to point to the CSV file in your S3 bucket
+s3_file_key = 'track_audio_features.csv'  # Update to point to the CSV file in your S3 bucket
 
 # Initialize an S3 client
 s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
