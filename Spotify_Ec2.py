@@ -7,6 +7,10 @@ import io
 from datetime import datetime
 import os
 
+all_tracks = []
+
+
+
 def save_token_info(token_info):
     with open('spotify_token_info.txt', 'w') as file:
         file.write(str(token_info))
@@ -64,6 +68,108 @@ if not token_info:
     save_token_info(token_info)
 
 token_info = refresh_token_if_expired(sp_oauth, token_info)
+
+def get_user_albums(sp):
+    user_albums = sp.current_user_saved_albums()
+    albums = []
+
+    while user_albums:
+        for item in user_albums['items']:
+            album = item['album']
+            albums.append({
+                'name': album['name'],
+                'artists': [artist['name'] for artist in album['artists']],
+                'release_date': album['release_date'],
+                'total_tracks': album['total_tracks'],
+                'Image URL': album['images'][0]['url'],
+                'album_id': album['id'],
+            })
+
+        # Check if there are more albums to retrieve
+        user_albums = sp.next(user_albums) if user_albums['next'] else None
+
+    return albums
+
+def get_all_tracks_in_playlist(playlist_id, sp):
+    tracks = []
+    offset = 0  # Start with the first page of tracks
+
+    while True:
+        playlist_tracks = sp.playlist_tracks(playlist_id, offset=offset)
+
+        if not playlist_tracks['items']:
+            break
+
+        for item in playlist_tracks['items']:
+            track = item['track']
+            
+            # Check if the track object is valid
+            if track:
+                image_url = track['album']['images'][0]['url']
+                tracks.append({
+                    'playlist_id': playlist_id,
+                    'track_name': track['name'],
+                    'artist(s)_name': [artist['name'] for artist in track['artists']],
+                    'artist_ids': [artist['id'] for artist in track['artists']],
+                    'album_name': track['album']['name'],
+                    'album_id': track['album']['id'],  # Add album_id field
+                    'track_id': track['id'],
+                    'Image URL': image_url,
+                    'release_date': track['album']['release_date'],
+                    'popularity': track['popularity'] 
+                })
+
+        offset += len(playlist_tracks['items'])
+
+    return tracks
+
+# Get the current user's playlists
+user_playlists = sp.current_user_playlists()
+
+def get_all_tracks_in_playlist(playlist_id, sp):
+    tracks = []
+    offset = 0  # Start with the first page of tracks
+
+    while True:
+        playlist_tracks = sp.playlist_tracks(playlist_id, offset=offset)
+
+        if not playlist_tracks['items']:
+            break
+
+        for item in playlist_tracks['items']:
+            track = item['track']
+            
+            # Check if the track object is valid
+            if track:
+                image_url = track['album']['images'][0]['url']
+                tracks.append({
+                    'playlist_id': playlist_id,
+                    'track_name': track['name'],
+                    'artist(s)_name': [artist['name'] for artist in track['artists']],
+                    'artist_ids': [artist['id'] for artist in track['artists']],
+                    'album_name': track['album']['name'],
+                    'album_id': track['album']['id'],  # Add album_id field
+                    'track_id': track['id'],
+                    'Image URL': image_url,
+                    'release_date': track['album']['release_date'],
+                    'popularity': track['popularity'] 
+                })
+
+        offset += len(playlist_tracks['items'])
+
+    return tracks
+
+
+def get_all_tracks_in_all_playlists(sp):
+    playlists = user_playlists
+    
+
+    for playlist in playlists['items']:
+        playlist_id = playlist['id']
+        tracks = get_all_tracks_in_playlist(playlist_id, sp)
+        all_tracks.extend(tracks)
+
+    return all_tracks
 
 
 def put_data_in_s3_bucket(sp):
@@ -161,7 +267,29 @@ def put_data_in_s3_bucket(sp):
     # Save the DataFrame to a CSV file
     df_playlists.to_csv(playlist_csv_file, index=False)
 
+    # Example usage:
+    user_albums = get_user_albums(sp)
 
+    # Create a DataFrame from the albums data
+    df_albums = pd.DataFrame(user_albums)
+
+    # Define the CSV file path
+    albums_csv_file = 'user_albums.csv'
+
+    # Save the DataFrame to a CSV file
+    df_albums.to_csv(albums_csv_file, index=False)
+
+    # Example usage:
+    all_user_tracks = get_all_tracks_in_all_playlists(sp)
+
+    # Create a DataFrame from the albums data
+    df_all_user_tracks = pd.DataFrame(all_user_tracks)
+
+    # Define the CSV file path
+    all_users_csv_file = 'all_user_tracks.csv'
+
+    # Save the DataFrame to a CSV file
+    df_all_user_tracks.to_csv(all_users_csv_file, index=False)
 
 
     # Upload both CSV files to AWS S3
@@ -183,7 +311,13 @@ def put_data_in_s3_bucket(sp):
 
     # Upload user playlists CSV file to AWS S3
     upload_to_aws(playlist_csv_file, s3_bucket_name, 'user_playlists.csv', aws_access_key_id, aws_secret_access_key)
-
+    
+    # Upload user user_albums CSV file to AWS S3
+    upload_to_aws(albums_csv_file, s3_bucket_name, 'user_albums.csv', aws_access_key_id, aws_secret_access_key)
+    
+    # Upload user user_albums CSV file to AWS S3
+    upload_to_aws(all_users_csv_file, s3_bucket_name, 'all_user_tracks.csv', aws_access_key_id, aws_secret_access_key)
+    
     print("User profile and artists data have been uploaded to S3.")
 
 
