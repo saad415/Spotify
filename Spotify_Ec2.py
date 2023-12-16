@@ -12,12 +12,12 @@ all_track_audio_features = []
 
 
 def save_token_info(token_info):
-    with open('spotify_token_info.txt', 'w') as file:
+    with open('/home/ec2-user/test/spotify_token_info.txt', 'w') as file:
         file.write(str(token_info))
 
 def load_token_info():
-    if os.path.exists('spotify_token_info.txt'):
-        with open('spotify_token_info.txt', 'r') as file:
+    if os.path.exists('/home/ec2-user/test/spotify_token_info.txt'):
+        with open('/home/ec2-user/test/spotify_token_info.txt', 'r') as file:
             token_info = eval(file.read())
         return token_info
     else:
