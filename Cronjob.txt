@@ -1,0 +1,106 @@
+
+
+KeyEc2: airflow_spotify
+
+To run airflow: airflow standalone
+
+from datetime import datetime
+import spotipy.oauth2 as oauth2
+
+
+# Your Spotify API credentials
+client_id = '484f223094b54d77a0b836e982d81799'
+client_secret = '791a80ce2748414bb9b7e455c3d15ccc'
+redirect_uri = 'https://accounts.spotify.com/authorize'
+
+# Read the access token and expiration time from the file
+with open('spotify_token.txt', 'r') as token_file:
+    access_token, expiration_time = token_file.read().strip().split('\n')
+
+# Convert expiration_time to a datetime object
+expiration_time = datetime.strptime(expiration_time, "%Y-%m-%d %H:%M:%S.%f")
+
+print("Access token: ", access_token, "\n Expire time: ", expiration_time)
+
+# Check if the token has expired
+if datetime.now() >= expiration_time:
+    # Refresh the access token
+    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri)
+    token_info = sp_oauth.refresh_access_token(access_token)  # Use the stored refresh token
+
+    # Store the new access token and expiration time
+    with open('spotify_token.txt', 'w') as token_file:
+        token_file.write(f"{token_info['access_token']}\n")
+        token_file.write(f"{token_info['expires_at']}\n")
+else:
+
+    print("token has not expired")
+
+
+BQBahfQHPKZCD3UK3MXs4oTJYoi9tsjUtvXIzOwXc47KqvBi0MkFlg97LTM-3G1a0-Nyw_Otj-pVBZe-mi7-GaJculY552UNY5UZBLE5GFhZRgQtiYuy50zEFDh8gvJmWlFfFS-xYW-sEV0B7aE1i7Nq-vurh5NKmk2-06XYuLCBvgNgwEYaoaWgj7ZgAO9jMDONle6Egyy8ONFfDGVV4RaRKvEjOTcqHWRYtF-nJZ-pIJkRQEuW1kXafBxG
+2023-12-14 23:47:41.000000
+pip install spotipy
+
+spotify_token_info.txt
+
+Current:
+{'access_token': 'BQDk23hRDXuzhVPSGXeVLH2_AAuURY6DMjZsAfe0b511V-b3xlySgNxqUS00X9aY-D5yROqiHIyPa5lfoQ-C0NFnIHJhLQbyBi37MUi_Jk5L2GkQpPJ1zzNywtz97DZ8eE60U1A-R2vYNZWvc5JNBPvGfbfPJZC4u4MLenvl2i8P1S0jVRiRITEBbAbISimi3khKvN0jrh5XJGwIXPFSrP9FqW48_fO-WDqZ4Au9BYAA-vh169clHogpxDBp', 'token_type': 'Bearer', 'expires_in': 3600, 'scope': 'user-read-email user-read-private playlist-read-private playlist-read-collaborative user-top-read user-library-read user-follow-read', 'expires_at': 1702671509, 'refresh_token': 'AQCo-RUA7znXNQn7ecqmIytix-PuX1yRlDMfokK0mZelvJ9dZCNkui8jVvRT5CqJW3u3SVAysPXMCPRgEDs6mOQco0pyqg_HRYUHXWZK4Xp-mdiV0VD1raWbEYS005I9Jqg'}
+
+{'access_token': 'BQAcVgNc5CrK-DP4OrUgWg5oxn-CYcPw6yJ88rBND_9P0nfsOw5wZfgn6yUcShSbM4cSL87njyROnMftgIYXi8gIHOB5s3JSxpqN7I68NUJMdpDohgqeDAq57rnlWuMdHIBPFL3mHJGe3FUU6k1Xqg5lfy1D3AREfYbnJb37k-42l1fgt4iTtYLzHmrdwoPOYLJg3eWF-Leh-DCAiilAQXkrHtlOoYna_xXUu6AX80cFPQ2immDUkLMbHZKF', 'token_type': 'Bearer', 'expires_in': 3600, 'scope': 'user-read-email user-read-private playlist-read-private playlist-read-collaborative user-top-read user-library-read user-follow-read', 'expires_at': 1702642498, 'refresh_token': 'AQCo-RUA7znXNQn7ecqmIytix-PuX1yRlDMfokK0mZelvJ9dZCNkui8jVvRT5CqJW3u3SVAysPXMCPRgEDs6mOQco0pyqg_HRYUHXWZK4Xp-mdiV0VD1raWbEYS005I9Jqg'}
+{'access_token': 'BQAE0WfEa0yPS1Kx65i3PVFTZ9bl0YDIocm9fBHKuBW2ByjhY9ZB3P5GD07sh-U8nOnvp_lRmq367vNmgK_uGekdvaTiDsf3PYfuoI6cH-0A8u6HqEX_B9rAQiM47oIDb6_0lmQ9DYX2cjKZ7M7Nmk3WPfbXz4LrK98UEsOtIPpY3Y1HxOHlqtH4A7n0lcmiU9QZyzNVaUmzpIlEVai4_zblWCDMv4wQiRz4QX6NvtjXta5cHTHOYLmqy55e', 'token_type': 'Bearer', 'expires_in': 3600, 'scope': 'user-read-email user-read-private playlist-read-private playlist-read-collaborative user-top-read user-library-read user-follow-read', 'expires_at': 1702640726, 'refresh_token': 'AQCo-RUA7znXNQn7ecqmIytix-PuX1yRlDMfokK0mZelvJ9dZCNkui8jVvRT5CqJW3u3SVAysPXMCPRgEDs6mOQco0pyqg_HRYUHXWZK4Xp-mdiV0VD1raWbEYS005I9Jqg'}
+
+ps aux | grep get_token.py
+ps aux | grep python3
+
+nohup python3 get_token.py &
+nohup python3 -u get_token.py &
+tail -f nohup.out
+
+ps aux | grep python3
+ps aux | grep get_token.py
+kill PID
+
+nohup python3 get_token.py > script.log 2>&1 &
+
+
+find / -name get_token.py
+
+/usr/bin/python3
+/usr/lib/python3.9/site-packages/awscli/customizations/eks/get_token.py
+/home/ec2-user/spotify/get_token.py
+
+
+get_token.cron
+*/5 * * * * /usr/bin/python3 /home/ec2-user/spotify/get_token.py
+python3 /home/ec2-user/spotify/get_token.py >> /home/ec2-user/spotify/cron.log 2>&1
+* * * * * /usr/bin/python3 /home/ec2-user/spotify/get_token.py >> /home/ec2-user/spotify/cron_log.txt 2>&1
+/usr/bin/python3
+* * * * * /home/ec2-user/spotify/run_script.sh
+crontab get_token.cron
+
+crontab -l
+crontab -e
+
+test:
+#!/bin/bash
+python3 /home/ec2-user/test/my_script.py >> /home/ec2-user/test/cron.log 2>&1
+* * * * * /home/ec2-user/test/run_script.sh
+0 9 * * * /home/ec2-user/test/run_script.sh (every day at 9 am)
+
+tail -f /home/ec2-user/test/cron.log
+
+Create cron job:
+vim run_script.sh
+
+nano cron.log
+
+clear cron.log file
+> /home/ec2-user/test/cron.log
+
+/home/ec2-user/test/run_script.sh
+
+url:
+https://accounts.spotify.com/authorize?client_id=484f223094b54d77a0b836e982d81799&response_type=code&redirect_uri=https%3A%2F%2Faccounts.spotify.com%2Fauthorize&scope=user-read-email+user-read-private+playlist-read-private+playlist-read-collaborative+user-top-read+user-library-read+user-follow-read
+https://accounts.spotify.com/authorize?client_id=484f223094b54d77a0b836e982d81799&response_type=code&redirect_uri=https%3A%2F%2Faccounts.spotify.com%2Fauthorize&scope=user-read-email+user-read-private+playlist-read-private+playlist-read-collaborative+user-top-read+user-library-read+user-follow-read
+https://accounts.spotify.com/authorize?code=AQCaDqoWTGpkURlFJ1AWpx374L6ALAgZs_VtIEqj7ogp3uek2UkF59XpeVXMhOwINpB6JFLO1E-WFFW2SilqzOMqE1Ee01CyBJVeWTDRN6yQNg6i_o-il9IvZ4Ccjbj2CC6lmqnUmuLI6yYC_F0sCnUYo8_PCfJ6JBnGvvppwQ0iA4h3GgP9rM3mG5BFQyEtri0Y4HDiyk9rJxefrELbiwggIw66RaPjmJMTTAW91Sb5b87wy_QP2VLzLOL9qyj9xLkt89dm734D19Rzz5W8MgApyxMoE_nQhOrmuh0QmJsheTRO3SBr_xga0n9H5_ldbZSs7tysmE7bxHXFwjDHvkeZyaMmUl-teTEsGPFx6urhpl8Z_mE
+https://accounts.spotify.com/authorize?code=AQBR_A8589Uaf-jOMEOC_nkSgpnC4RpKpsqrgKUbE0ajXv359yLD0UEyD8Aobm4nZdFGFZtPU7SHuUHKuu1KWLZsctP_fhEbICwBXXiTBAw9bWsJ3XS0QGizqz5fENh4l-flrGaDHqmlJc2eEP9hlP2g9iKuZ40mKT50scRlc17KPfnGzdxRrvoPuyPcdsI5aO7vRsxI46tZs7x4DkbTFkYQzdoVx7hMQDMtRg48ESLtmk9XqeqwGCBmvMvdyzWcTlrNCVSPL7aiD6SS1PjkFIVBsoB0ZdgZ4qcMporE8iYv3gGX1X_uIas7Rp7J2KNT5k0QcMEio6J5-sfFLaYWCPSsYr8HoJoxTg-M5qiteZmc4xgcPUw
