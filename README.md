@@ -1,48 +1,34 @@
 # Spotify Data Analysis and Visualization using Power BI
 
 ## Overview
-This project aims to extract, process, and visualize Spotify user data to gain insights into listening patterns and track characteristics using Spotify Web API, Python, Power BI, Deneb, HTML, and Google Drive.
-Link: https://app.powerbi.com/reportEmbed?reportId=34efc983-b281-4498-9635-c19ee04ae3e3&autoAuth=true&embeddedDemo=true
-![Animated GIF](https://github.com/saad415/Spotify/blob/main/gif.gif)
+This project leverages advanced data engineering and visualization techniques to extract, process, and analyze Spotify user data. It provides a dynamic and insightful view into listening patterns and track characteristics using the Spotify Web API, Python, AWS (EC2 and S3), Power BI, Deneb, HTML, and Google Drive. 
+[Link to Dashboard](https://app.powerbi.com/reportEmbed?reportId=8fe7f296-f66c-4e4b-a423-d686a53feeb9&autoAuth=true&embeddedDemo=true)
+![Dashboard Preview](https://github.com/saad415/Spotify/blob/main/gif.gif)
 
+## Advanced Technical Implementation
 
-## Technical Implementation
+### Automated Data Pipeline
+- **Spotify API Integration:** Utilized Python scripts hosted on an AWS EC2 instance to interface with the Spotify Web API, ensuring real-time data access.
+- **AWS S3 Storage:** Configured AWS S3 buckets for secure and scalable storage of extracted data in CSV format.
+- **Automated Data Refresh:** Established a cron job on the AWS EC2 instance to update CSV files daily, maintaining data relevancy and accuracy.
 
-### Data Extraction
-- **Spotify Developer Account:** Created and configured for API access.
-- **Python Scripts:** Developed for interfacing with the Spotify API.
+### Data Extraction and Storage
+- **Data Retrieval:** Extracted comprehensive user and track data, including user profiles, playlists, and detailed audio features of tracks.
+- **CSV Storage:** Efficiently compiled and organized data into CSV files for ease of processing and analysis.
 
-### Data Retrieved
-- **User Data:** Profile data, followed users, and user playlists.
-- **Track Data:** Tracks in playlists with audio features like Liveliness, Loudness, Danceability, Speechiness, Energy, Tempo, etc.
+### Data Analysis and Visualization
+- **Power BI Integration:** Employed Power BI for advanced data analysis and visualization, creating an interactive and dynamic user experience.
+- **Custom Visualization:** Integrated HTML and Deneb within Power BI to showcase track images and visualize average track popularity.
 
-### Data Storage
-- **CSV Format:** Data compiled and stored in CSV files.
-- **Google Drive:** Used for data file storage and backup.
-
-## Data Analysis
-- **Average Calculations:** Computed averages of various audio features.
-- **Trends Analysis:** Visualized release dates of tracks against the number of tracks.
-
-## Visualization and Dashboard
-
-### Power BI Dashboard
-- **Track Images:** Displayed using HTML content within Power BI.
-- **Popularity Visual:** Illustrated using Deneb for average track popularity.
-
-### Interactive Elements
-- **Online Dashboard:** Published and made interactive for dynamic data exploration.
-
-## Project Impact
-- The project offers a comprehensive view of personal Spotify usage and track characteristics.
-- Demonstrates skills in data extraction, Python scripting, data analysis, and advanced visualization techniques in Power BI.
+## Project Impact and Skills Demonstrated
+- **Comprehensive Analysis:** Offers in-depth insights into personal Spotify usage and track characteristics.
+- **Technical Proficiency:** Showcases expertise in Python scripting, API integration, AWS cloud services, automated data pipelines, and advanced Power BI visualizations.
+- **Automation and Scalability:** Highlights the ability to automate data processes and efficiently handle large datasets in a cloud environment.
 
 ## Repository Contents
-- `scripts/`: Source code for Python scripts.
-- `data/`: Sample data files (anonymized).
-- `main.py/`: Is main python code.
-- `Spotify.pbix`: Power BI dashboard file.
-- `Use full code.txt`: Is the text file conatining HTML code tp show images and Deneb code to show average popularity.
-- `README.md`: Documentation including setup instructions and usage guide.
-
----
+- `scripts/`: Python scripts for data extraction and interaction with the Spotify API.
+- `get_data.py/`: It is the python code to get data from s3 bucket into power bi.
+- `main.py/`: The main Python script for data extraction and processing.
+- `Softify_Ec2.pbix`: The Power BI dashboard file for visualization.
+- `Useful_code.txt`: Contains HTML and Deneb code for Power BI visualizations.
+- `README.md`: This documentation, including detailed project overview, technical implementation, and usage guide.
