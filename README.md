@@ -3,7 +3,7 @@
 ## Overview
 This project leverages advanced data engineering and visualization techniques to extract, process, and analyze Spotify user data. It provides a dynamic and insightful view into listening patterns and track characteristics using the Spotify Web API, Python, AWS (EC2 and S3), Power BI, Deneb, HTML, and Google Drive. 
 - [Link to Dashboard](https://app.powerbi.com/reportEmbed?reportId=8fe7f296-f66c-4e4b-a423-d686a53feeb9&autoAuth=true&embeddedDemo=true)
-![Dashboard Preview](https://github.com/saad415/Spotify/blob/main/gif.gif)
+- [Dashboard Preview](https://github.com/saad415/Spotify/blob/main/gif.gif)
 
 ## Advanced Technical Implementation
 
