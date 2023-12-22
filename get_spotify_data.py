@@ -54,8 +54,8 @@ def get_user_playlists(user_id, token):
 
 
 # Your Spotify API Credentials
-client_id = '484f223094b54d77a0b836e982d81799'
-client_secret = '791a80ce2748414bb9b7e455c3d15ccc'
+client_id = ''
+client_secret = ''
 
 # Get Access Token
 access_token = get_spotify_token(client_id, client_secret)

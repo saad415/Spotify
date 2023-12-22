@@ -28,9 +28,9 @@ def download_csv_files_from_s3(aws_access_key_id, aws_secret_access_key, s3_buck
     return dataframes
 
 # Example usage:
-aws_access_key_id = 'AKIAUTEANXGB2VM2JSPP'
-aws_secret_access_key = 'QfrguEBd0/8rmXctChoj+oO6WyaZLUZvhU2Jlcht'
-s3_bucket_name = 'saad-spotify'
+aws_access_key_id = ''
+aws_secret_access_key = ''
+s3_bucket_name = ''
 file_keys = ['track_audio_features.csv', 'user_playlists.csv', 'all_user_tracks.csv', 'user_profile.csv']  # List of S3 object keys
 
 dataframes = download_csv_files_from_s3(aws_access_key_id, aws_secret_access_key, s3_bucket_name, file_keys)

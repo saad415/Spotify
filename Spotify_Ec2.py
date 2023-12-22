@@ -31,14 +31,14 @@ def refresh_token_if_expired(sp_oauth, token_info):
     return token_info
 
 # Set your Spotify API credentials
-client_id = "484f223094b54d77a0b836e982d81799"
-client_secret = "791a80ce2748414bb9b7e455c3d15ccc"
+client_id = ""
+client_secret = ""
 redirect_uri = "https://accounts.spotify.com/authorize"  # This should match the URI set in your Spotify app settings
 
 
 # AWS credentials (configure these with your own values)
-aws_access_key_id = 'AKIAUTEANXGB2VM2JSPP'
-aws_secret_access_key = 'QfrguEBd0/8rmXctChoj+oO6WyaZLUZvhU2Jlcht'
+aws_access_key_id = ''
+aws_secret_access_key = ''
 s3_bucket_name = 'saad-spotify'
 s3_file_key = 'user_data.csv'  # Update to use .csv extension
 
